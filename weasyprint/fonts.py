@@ -89,7 +89,7 @@ else:
         void pango_fc_font_map_set_config (
             PangoFcFontMap *fcfontmap, FcConfig *fcconfig);
         void pango_fc_font_map_shutdown (PangoFcFontMap *fcfontmap);
-
+        void pango_fc_font_map_config_changed (PangoFcFontMap *fcfontmap);
 
         // PangoCairo
 
@@ -278,6 +278,8 @@ else:
                     font_added = fontconfig.FcConfigAppFontAddFile(
                         config, filename.encode(FILESYSTEM_ENCODING))
                     if font_added:
+                        pangoft2.pango_fc_font_map_config_changed(
+                            ffi.cast('PangoFcFontMap *', self.font_map))
                         # TODO: we should mask local fonts with the same name
                         # too as explained in Behdad's blog entry
                         return filename
